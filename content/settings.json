@@ -1,0 +1,9 @@
+{
+  "title": "Easypay Docs",
+  "url": "https://easypay.pt/docs",
+  "logo": {
+    "light": "/logo-light.svg",
+    "dark": "/logo-dark.svg"
+  },
+  "github": "Easypay/docs"
+}
