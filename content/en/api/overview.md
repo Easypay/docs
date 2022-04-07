@@ -1,9 +1,11 @@
 ---
-title: Errors
+title: Overview
 description: ""
-position: 2
-category: Guide
+position: 40
+category: API
 ---
+
+## Errors
 
 Easypay uses HTTP response status codes to indicate the success or failure of your API requests. If your request fails, Easypay returns an error using the appropriate status code.
 
