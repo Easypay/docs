@@ -37,7 +37,7 @@ At the moment, only [single payments](/concepts/payment-types#single) are accept
 
 All Checkout interactions begin by making a server-to-server [request to create a Checkout session](/checkout/guide#creating-a-checkout-session). The request will return a *Checkout **manifest***, which is then used to configure and display a Checkout form created exclusively for that payment interaction.
 
-You can do so by manually [including an iframe](/checkout/guide#iframe) in your page, or by calling our [JavaScript SDK](/checkout/guide#javascript-sdk).
+You can then display a Checkout form in your page by invoking our [Checkout SDK](/checkout/guide#integrating-in-your-page). The SDK can be included from a CDN, via HTML `<script>` tag, or you can use it as an NPM dependency in your project and import it in JavaScript/TypeScript.
 
 This two-step approach makes Checkout the easiest way to integrate easypay payments in your custom website.
 

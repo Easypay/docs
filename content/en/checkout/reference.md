@@ -5,4 +5,12 @@ position: 33
 category: Checkout
 ---
 
-Conteúdo
+## API
+
+### `/checkout`
+
+`POST`
+
+## SDK
+
+### `startCheckout`
