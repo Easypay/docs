@@ -5,4 +5,10 @@ position: 32
 category: Checkout
 ---
 
-Conteúdo
+## Creating a checkout session
+
+## Iframe
+
+## JavaScript SDK
+
+(coming soon!)
