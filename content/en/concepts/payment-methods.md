@@ -17,7 +17,7 @@ Isto aparece aqui
 
 ## Direct Debit
 
-## Virtual Iban
+## Virtual IBAN
 
 ## Boleto Bancário
 

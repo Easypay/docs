@@ -47,7 +47,6 @@ An example payload is:
       "descriptive": "Descriptive Example"
     },
     "currency": "EUR",
-    "start_time": "2023-05-30 16:05",
     "expiration_time": null
   },
   "order": {
