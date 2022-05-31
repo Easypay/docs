@@ -105,10 +105,41 @@ An object with the following properties:
 #### Parameters:
 - `manifest`: The return object from the [checkout service](#checkout).
 - `options`: An optional object containing any of the following properties:
-  - `id`: A `string` with the id of the HTML element where the Checkout form should be included (default: `'easypay-checkout'`).
-  - `onMessage`: A `function(string)` that receives the Checkout events (for now, only `'complete'` is available).
-  - `testing`: A `boolean` indicating whether to use the testing API (`true`) or the production one (`false`, default).
+  | Option      | Type       | Required | Default            | Description                                                                   |
+  | ----------- | ---------- | -------- | ------------------ | ----------------------------------------------------------------------------- |
+  | `id`        | `string`   | no       | `easypay-checkout` | The id of the HTML element where the Checkout form should be included.        |
+  | `onSuccess` | `function` | no       | `() => {}`         | Callback function to be called when the Checkout is finished succesfully.     |
+  | `onError`   | `function` | no       | `() => {}`         | Callback function to be called on errors.                                     |
+  | `testing`   | `boolean`  | no       | `false`            | Whether to use the testing API (`true`) or the production one (`false`).      |
 
 #### Return:
 - A `CheckoutInstance` object, containing the following method:
   - `unmount()`: Removes all Checkout form content and event listener.
+
+#### Success handler:
+
+`onSuccess(checkoutPaymentInfo)`
+
+Receives an object with the following property:
+
+| Property    | Type       | Description                                                                                                                                 |
+| ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `paid`      | `boolean`  | Whether the payment was completed (for synchronous methods, e.g. credit card) or not (for asynchronous methods, e.g. Multibanco reference). |
+
+#### Error handler:
+
+`onError(error)`
+
+Receives an object with the following property:
+
+| Property    | Type       | Description                                                               |
+| ----------- | ---------- | ------------------------------------------------------------------------- |
+| `code`      | `string `  | The type of error that occurred. See the table below for possible values. |
+
+The error `code` has the following possible values and recommended solutions:
+
+| Value              | Cause                              | Recommended solution                                                                                                                 |
+| ------------------ | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `checkout-expired` | The Checkout session has expired.  | Create a new Checkout session with the server-to-server call and use the newly returned Manifest to instantiate a new Checkout form. |
+| `already-paid`     | The Checkout was already paid.     | Refresh the order information and confirm that it was paid. Give feedback to the user accordingly.                                   |
+| `generic-error`    | An unspecified error occurred.     | Since the root cause is unclear, you can try creating a new session or signal an error to the user.                                  |
