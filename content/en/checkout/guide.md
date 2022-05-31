@@ -164,22 +164,54 @@ checkoutInstance.unmount()
 ### Reacting to Checkout completion
 
 It will often be useful to know when users finish the Checkout process, so you can hide the Checkout contents and display a thank you message.
-The SDK includes a callback parameter that you can pass to get notified when the user ends the interaction:
+The SDK includes a callback parameter that you can pass to get notified when the Checkout process is succesfully completed.
+
+Your callback function can receive a parameter with additional details about the outcome of the Checkout process. For now, the only additional information is whether the payment was completed (synchronous payment method) or not (asynchronous payment method). You can check the differences in the [payment methods documentation](/concepts/payment-methods).
 
 ```javascript
+function mySuccessHandler(checkoutPaymentInfo) {
+  checkoutInstance.unmount()
+  if (checkoutPaymentInfo.paid) {
+    document.write('Your payment was received. Thank you.')
+  } else {
+    document.write('Your order was received and is now awaiting payment. Thank you.')
+  }
+}
+
 const checkoutInstance = startCheckout(manifest, {
-  onMessage: myMessageHandler
+  onSuccess: mySuccessHandler
 })
 ```
 
-In your message handler, you should receive a `string` parameter that will indicate which event has happened (currently only `complete` is available).
+### Reacting to Checkout errors
+
+The Checkout process is resilient to most forms of errors and allows the customer to retry multiple times with different payment methods until the payment is completed.
+However, there are cases where the Checkout form is unable to recover on its own, such as an expired Checkout session or an attempt to pay a Checkout that was already paid.
+
+You can be notified of such cases by passing the callback parameter `onError`:
 
 ```javascript
-function myMessageHandler(checkoutMessage) {
-  if (checkoutMessage === 'complete') {
-    checkoutInstance.unmount()
-    document.write('Checkout session complete. Thank you.')
+function myErrorHandler(error) {
+  checkoutInstance.unmount()
+  switch (error.code) {
+    case 'checkout-expired':
+      // In this case a new Checkout session must be created
+      const manifest = await yourFunctionToGetTheManifest()
+      checkoutInstance = startCheckout(manifest, {
+        onError: myErrorHandler
+      })
+      break
+    case 'already-paid':
+      document.write('Your order was already paid. Thank you.')
+      break
+    default:
+      document.write('Unable to process payment, please try again.')
   }
 }
+
+const checkoutInstance = startCheckout(manifest, {
+  onError: myErrorHandler
+})
 ```
 
+The list of possible errors is further documented in [the reference](/checkout/reference#sdk)
