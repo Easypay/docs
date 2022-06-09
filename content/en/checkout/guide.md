@@ -29,19 +29,9 @@ An example payload is:
 
 ```json
 {
-  "type": [
-    "single"
-  ],
+  "type": ["single"],
   "payment": {
-    "methods": [
-      "cc",
-      "mb",
-      "mbw",
-      "dd",
-      "vi",
-      "uf",
-      "sc"
-    ],
+    "methods": ["cc", "mb", "mbw", "dd", "vi", "uf", "sc"],
     "type": "sale",
     "capture": {
       "descriptive": "Descriptive Example"
@@ -77,13 +67,17 @@ You can check all the possible parameters in the [Checkout reference](/checkout/
 The service will return something like:
 
 ```json
-{"id":"57cc19e9-f393-4cfa-9516-8807763b5096","session":"8zoaBOC0Mj5Mg_YAbdRCqYGI66Zc2DttAWeyVcedzhuT3r2IE8aS7l7H-sQOyppgawIv-wO48H_oKDHMzvMf1TeIJwo3Xu7HO7Tmj7y1iblt8t9JlEzyNdf5HurTvCeszC8PdRS4mbaPBCMCQ7g4xkG0qUuOEhiee5OB49MJJQ-Mo9vEnC_R4hzRBi-HSIMviTNDcCm5NiMnn__nWZxpfAmh6pYUg_eznqTGNbheYLu7ku_mBn7HvAdJQcgsmk6eeD-Z9S8SsK-ONHpbJQz1LNZsUkIIiWpNxPMrzD5Je0r2veawzAaIQmCeN8hYncHDfl5YZ7PP28MFVtEjMGOxsOsqxL4wmDOLPO5s6aWMq7Dxns-OGgf0r7dmaka4Y2mXovLVtNxsGgsNbBav8K86f5DceCDmPKBzYh-X5i1nx07LuqYKoJmA8NfyVP5tb-R3Y9dtwbPzcHc_AyQVKlsM0HtW3JXAdqoIBfsDgUqwASeuqQHEyIITKlcRvDIzWFaxTgXmmJauj6et7mo1GEM4L1gDkA1IXOd3n4HU2GvfPw==","config":null}
+{
+  "id": "57cc19e9-f393-4cfa-9516-8807763b5096",
+  "session": "8zoaBOC0Mj5Mg_YAbdRCqYGI66Zc2DttAWeyVcedzhuT3r2IE8aS7l7H-sQOyppgawIv-wO48H_oKDHMzvMf1TeIJwo3Xu7HO7Tmj7y1iblt8t9JlEzyNdf5HurTvCeszC8PdRS4mbaPBCMCQ7g4xkG0qUuOEhiee5OB49MJJQ-Mo9vEnC_R4hzRBi-HSIMviTNDcCm5NiMnn__nWZxpfAmh6pYUg_eznqTGNbheYLu7ku_mBn7HvAdJQcgsmk6eeD-Z9S8SsK-ONHpbJQz1LNZsUkIIiWpNxPMrzD5Je0r2veawzAaIQmCeN8hYncHDfl5YZ7PP28MFVtEjMGOxsOsqxL4wmDOLPO5s6aWMq7Dxns-OGgf0r7dmaka4Y2mXovLVtNxsGgsNbBav8K86f5DceCDmPKBzYh-X5i1nx07LuqYKoJmA8NfyVP5tb-R3Y9dtwbPzcHc_AyQVKlsM0HtW3JXAdqoIBfsDgUqwASeuqQHEyIITKlcRvDIzWFaxTgXmmJauj6et7mo1GEM4L1gDkA1IXOd3n4HU2GvfPw==",
+  "config": null
+}
 ```
 
 This return object is referred to as a **Checkout manifest**, and will be needed in the steps below.
 
-
 ## Integrating in your page
+
 ### Script tag
 
 Include the easypay Checkout SDK in your page:
@@ -108,7 +102,7 @@ const manifest = await yourFunctionToGetTheManifest()
 Then, use the globally available `easypayCheckout` variable to initialize the SDK and display the form:
 
 ```javascript
-easypayCheckout.startCheckout(manifest);
+easypayCheckout.startCheckout(manifest)
 ```
 
 And the Checkout should be running smoothly.
@@ -143,7 +137,7 @@ You can pass the id in the options parameter of the Checkout initialization:
 
 ```javascript
 startCheckout(manifest, {
-  id: 'checkout-form'
+  id: 'checkout-form',
 })
 ```
 
@@ -179,7 +173,7 @@ function mySuccessHandler(checkoutPaymentInfo) {
 }
 
 const checkoutInstance = startCheckout(manifest, {
-  onSuccess: mySuccessHandler
+  onSuccess: mySuccessHandler,
 })
 ```
 
@@ -215,3 +209,30 @@ const checkoutInstance = startCheckout(manifest, {
 ```
 
 The list of possible errors is further documented in [the reference](/checkout/reference#sdk)
+
+### How to use popup module
+
+If you want to integrate Checkout and display it in a popup this is what you need to do:
+
+1. Import easypay's Checkout SDK into you project:
+
+   - See [Integrating in your page](https://github.com/Easypay/docs/blob/afigueiredo/CR-1526_Document_checkout_sdk_display_option/content/en/checkout/guide.md#integrating-in-your-page)
+
+2. Add a button with an id to your page:
+
+```html
+<button id="checkout">Open Popup</button>
+```
+
+```js
+function initEasypayCheckoutSDK(manifest) {
+  checkoutInstance = easypayCheckout.startCheckout(manifest, {
+    id: 'checkout',
+    display: 'popup',
+  })
+}
+```
+
+Result:
+
+<img width="746" alt="Checkout Popup Mode" src="https://user-images.githubusercontent.com/30448483/172881494-7265ff97-d142-4fee-9a2b-047b986dbefc.png">

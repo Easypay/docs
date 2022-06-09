@@ -19,6 +19,7 @@ Creates a Checkout Session.
 <!-- TODO: Better way to show this! -->
 
 An object with the following properties:
+
 - `type` (*required*): `Array` of `string`s representing which [payment type(s)](/concepts/payment-types) this Checkout session should accept. For now, only `['single']` is supported.
 - `payment` (*required*): `Object` describing the payment configuration, with the following properties:
   - `methods`: `Array` of `string`s with the payment methods accepted in this Checkout session. The available ones are:
@@ -58,15 +59,15 @@ An object with the following properties:
     - `account_holder` (*required*): `string` (<= 100 characters) with the name of the Bank account holder.
     - `country_code`: `string` Bank account country code.
     - `max_num_debits`: Optional `string` with the maximum number of debits allowed in the SDD Mandate.
-  <!-- TODO: after we support frequent/sub. - `max_value`: `number` the maximum total value of funds transferred. -->
-  <!-- TODO: after we support frequent/sub. How is this used? - `min_value`: -->
-  <!-- TODO: after we support frequent/sub. `unlimited_payments`: `boolean` (default `true`) unlimited transactions, `max_value` and `min_value` are per transaction. -->
-  <!-- TODO: after we support frequent/sub. - `frequency`: `string` one of `'1D'`, `'1W'`, `'2W'`, `'1M'`, `'2M'`, `'3M'`, `'4M'`, `'6M'`, `'1Y'`, `'2Y'`, `'3Y'`, -->
-  <!-- TODO: only for frequent/sub? - `max_captures`: *required* when no `expiration_time` is set. -->
-  <!-- TODO: after we support frequent/sub. - `start_time`: `string` in the format `'Y-m-d H:i'`, defining the start of billing cycles. -->
-  <!-- TODO: after we support frequent/sub. - `failover`: `boolean` (default `false`) After all retries failed, the payment cycle can have another try with another `single` method. -->
-  <!-- TODO: after we support frequent/sub. - `capture_now`: `boolean` (default `false`) whether to schedule an immediate capture and schedule the second one for `start_time`. -->
-  <!-- TODO: only for frequent/sub? - `retries`: `number` (default `0`) Number of retries in each payment cycle. -->
+      <!-- TODO: after we support frequent/sub. - `max_value`: `number` the maximum total value of funds transferred. -->
+      <!-- TODO: after we support frequent/sub. How is this used? - `min_value`: -->
+      <!-- TODO: after we support frequent/sub. `unlimited_payments`: `boolean` (default `true`) unlimited transactions, `max_value` and `min_value` are per transaction. -->
+      <!-- TODO: after we support frequent/sub. - `frequency`: `string` one of `'1D'`, `'1W'`, `'2W'`, `'1M'`, `'2M'`, `'3M'`, `'4M'`, `'6M'`, `'1Y'`, `'2Y'`, `'3Y'`, -->
+      <!-- TODO: only for frequent/sub? - `max_captures`: *required* when no `expiration_time` is set. -->
+      <!-- TODO: after we support frequent/sub. - `start_time`: `string` in the format `'Y-m-d H:i'`, defining the start of billing cycles. -->
+      <!-- TODO: after we support frequent/sub. - `failover`: `boolean` (default `false`) After all retries failed, the payment cycle can have another try with another `single` method. -->
+      <!-- TODO: after we support frequent/sub. - `capture_now`: `boolean` (default `false`) whether to schedule an immediate capture and schedule the second one for `start_time`. -->
+      <!-- TODO: only for frequent/sub? - `retries`: `number` (default `0`) Number of retries in each payment cycle. -->
 - `order` (*required*): `Object` representing the order/cart being paid.
   - `items`: `Array` of `Object`s with the following properties:
     - `key`: `string` with the merchant's key to identify the item.
@@ -89,7 +90,7 @@ An object with the following properties:
   - `fiscal_number`: `string` (<= 20 characters) with the customer's fiscal number (prefixed by the country code, e.g. `PT123456789`)
   - `key`: `string` (<= 255 characters) with the merchant's key to identify the customer.
   <!-- TODO: unused for now? - `language`: -->
- 
+
 #### Possible responses:
 
 - 201 Created
@@ -103,16 +104,24 @@ An object with the following properties:
 ### `startCheckout(manifest, [options])`
 
 #### Parameters:
+
 - `manifest`: The return object from the [checkout service](#checkout).
 - `options`: An optional object containing any of the following properties:
-  | Option      | Type       | Required | Default            | Description                                                                   |
-  | ----------- | ---------- | -------- | ------------------ | ----------------------------------------------------------------------------- |
-  | `id`        | `string`   | no       | `easypay-checkout` | The id of the HTML element where the Checkout form should be included.        |
-  | `onSuccess` | `function` | no       | `() => {}`         | Callback function to be called when the Checkout is finished succesfully.     |
-  | `onError`   | `function` | no       | `() => {}`         | Callback function to be called on errors.                                     |
-  | `testing`   | `boolean`  | no       | `false`            | Whether to use the testing API (`true`) or the production one (`false`).      |
+  | Option | Type | Required | Default | Description |
+  | ------------ | ---------- | -------- | ------------------ | -------------------------------------------------------------------------- |
+  | `id` | `string` | no | `easypay-checkout` | The id of the HTML element where the Checkout form should be included. |
+  | `onSuccess` | `function` | no | `() => {}` | Callback function to be called when the Checkout is finished successfully. |
+  | `onError` | `function` | no | `() => {}` | Callback function to be called on errors. |
+  | `onClose` | `function` | no | `undefined` | Callback function to be called when the Checkout popup is closed. |
+  | `testing` | `boolean` | no | `false` | Whether to use the testing API (`true`) or the production one (`false`). |
+  | `display`(1) | `string` | no | `inline` | The display style of the element that hosts the Checkout |
+
+  ##### Options
+
+  (1)`display` available values: `inline`(default) or `popup`
 
 #### Return:
+
 - A `CheckoutInstance` object, containing the following method:
   - `unmount()`: Removes all Checkout form content and event listener.
 
@@ -122,9 +131,9 @@ An object with the following properties:
 
 Receives an object with the following property:
 
-| Property    | Type       | Description                                                                                                                                 |
-| ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `paid`      | `boolean`  | Whether the payment was completed (for synchronous methods, e.g. credit card) or not (for asynchronous methods, e.g. Multibanco reference). |
+| Property | Type      | Description                                                                                                                                 |
+| -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `paid`   | `boolean` | Whether the payment was completed (for synchronous methods, e.g. credit card) or not (for asynchronous methods, e.g. Multibanco reference). |
 
 #### Error handler:
 
@@ -132,14 +141,14 @@ Receives an object with the following property:
 
 Receives an object with the following property:
 
-| Property    | Type       | Description                                                               |
-| ----------- | ---------- | ------------------------------------------------------------------------- |
-| `code`      | `string `  | The type of error that occurred. See the table below for possible values. |
+| Property | Type      | Description                                                               |
+| -------- | --------- | ------------------------------------------------------------------------- |
+| `code`   | `string ` | The type of error that occurred. See the table below for possible values. |
 
 The error `code` has the following possible values and recommended solutions:
 
-| Value              | Cause                              | Recommended solution                                                                                                                 |
-| ------------------ | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `checkout-expired` | The Checkout session has expired.  | Create a new Checkout session with the server-to-server call and use the newly returned Manifest to instantiate a new Checkout form. |
-| `already-paid`     | The Checkout was already paid.     | Refresh the order information and confirm that it was paid. Give feedback to the user accordingly.                                   |
-| `generic-error`    | An unspecified error occurred.     | Since the root cause is unclear, you can try creating a new session or signal an error to the user.                                  |
+| Value              | Cause                             | Recommended solution                                                                                                                 |
+| ------------------ | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `checkout-expired` | The Checkout session has expired. | Create a new Checkout session with the server-to-server call and use the newly returned Manifest to instantiate a new Checkout form. |
+| `already-paid`     | The Checkout was already paid.    | Refresh the order information and confirm that it was paid. Give feedback to the user accordingly.                                   |
+| `generic-error`    | An unspecified error occurred.    | Since the root cause is unclear, you can try creating a new session or signal an error to the user.                                  |
