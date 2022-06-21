@@ -76,11 +76,6 @@ An object with the following properties:
     - `value`: `number`, the price (rounded to 2 decimals) being paid for the specific item(s).
   - `key`: `string` with the merchant's key to identify the order.
   - `value` (*required*): `number`, the price (rounded to 2 decimals) being paid for the entire order.
-- `config`: Optional `Object` with possible UI configurations:
-  - `hide_details`: `boolean` (default `false`) If `customer` is given and non-empty, skip the customer details form and show a summary with the given information.
-  - `language`: `string` indicating the display language. Supported languages are: `'en'` and `'pt_PT'`. <!-- TODO consider changing to pt-PT (ISO)? -->
-    If not sent, a default language will be selected according to the customer's browser language.
-  - `logo_url`: `string` with a merchant logo to show above the Checkout form.
 - `customer` (*required*):
   - `id`: Optional `string` with the uuid of a previously created customer.
   - `name` (*required*): `string` (<= 255 characters) with the customer's name.
@@ -107,18 +102,22 @@ An object with the following properties:
 
 - `manifest`: The return object from the [checkout service](#checkout).
 - `options`: An optional object containing any of the following properties:
-  | Option | Type | Required | Default | Description |
-  | ------------ | ---------- | -------- | ------------------ | -------------------------------------------------------------------------- |
-  | `id` | `string` | no | `easypay-checkout` | The id of the HTML element where the Checkout form should be included. |
-  | `onSuccess` | `function` | no | `() => {}` | Callback function to be called when the Checkout is finished successfully. |
-  | `onError` | `function` | no | `() => {}` | Callback function to be called on errors. |
-  | `onClose` | `function` | no | `undefined` | Callback function to be called when the Checkout popup is closed. |
-  | `testing` | `boolean` | no | `false` | Whether to use the testing API (`true`) or the production one (`false`). |
-  | `display`(1) | `string` | no | `inline` | The display style of the element that hosts the Checkout |
+  | Option        | Type       | Required | Default            | Description                                                                |
+  | ------------- | ---------- | -------- | ------------------ | -------------------------------------------------------------------------- |
+  | `id`          | `string`   | no       | `easypay-checkout` | The id of the HTML element where the Checkout form should be included.     |
+  | `onSuccess`   | `function` | no       | `() => {}`         | Callback function to be called when the Checkout is finished successfully. |
+  | `onError`     | `function` | no       | `() => {}`         | Callback function to be called on errors.                                  |
+  | `onClose`     | `function` | no       | `undefined`        | Callback function to be called when the Checkout popup is closed.          |
+  | `testing`     | `boolean`  | no       | `false`            | Whether to use the testing API (`true`) or the production one (`false`).   |
+  | `display`(1)  | `string`   | no       | `inline`           | The display style of the element that hosts the Checkout.                  |
+  | `hideDetails` | `boolean`  | no       | `false`            | Whether to hide the details form or not. An expandable summary will be shown with the details, instead. |
+  | `language`(2) | `string`   | no       | `undefined`        | The language in which to display the Checkout.                             |
+  | `logoUrl`     | `string`   | no       | `undefined`        | The merchant logo url to display in the Checkout.                          |
 
   ##### Options
 
-  (1)`display` available values: `inline`(default) or `popup`
+  (1) `display` available values: `inline` (default) or `popup`.  
+  (2) `language` available values: `en` or `pt_PT`. If left `undefined`, a default language will be selected according to the customer's browser language.
 
 #### Return:
 
