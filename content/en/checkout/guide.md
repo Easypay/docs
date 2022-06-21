@@ -82,8 +82,7 @@ This return object is referred to as a **Checkout manifest**, and will be needed
 Include the easypay Checkout SDK in your page:
 
 ```html
-<!-- TODO: include from CDN -->
-<script src="TODO_CORRECT_LINK/0.0.1/easypay-checkout-sdk.js"></script>
+<script src="https://cdn.easypay.pt/checkout/2.0.0/"></script>
 ```
 
 Prepare an empty element in your page where you'd like the Checkout form to be and give it the `easypay-checkout` id:
