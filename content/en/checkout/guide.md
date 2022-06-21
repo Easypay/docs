@@ -57,7 +57,6 @@ An example payload is:
     "key": "order-key",
     "value": 19.5
   },
-  "config": null,
   "customer": null
 }
 ```
