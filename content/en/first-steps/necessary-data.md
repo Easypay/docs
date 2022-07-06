@@ -22,7 +22,7 @@ These will **only work for testing purposes** and **won't work** in production c
 
 TODO
 
-### CCs (Credit cards?)
+### CCs (Credit Cards?)
 
 TODO
 
