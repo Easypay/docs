@@ -19,10 +19,10 @@ It requires no extensive programming knowledge by including a pre-built payment 
 ## Supported payment methods
 
 Currently, the supported payment methods are:
-- [Credit card](/concepts/payment-methods#credit--debit-card)
-- [MB Way](/concepts/payment-methods#mb-way)
-- [Multibanco reference](/concepts/payment-methods#multibanco)
-- [Direct debit](/concepts/payment-methods#direct-debit)
+- [Credit Card](/concepts/payment-methods#credit--debit-card)
+- [MB WAY](/concepts/payment-methods#mb-way)
+- [Multibanco Reference](/concepts/payment-methods#multibanco)
+- [Direct Debit](/concepts/payment-methods#direct-debit)
 - [Virtual IBAN](/concepts/payment-methods#virtual-iban)
 - [Universo Flex](/concepts/payment-methods#universo-flex)
 - [Santander Consumer](/concepts/payment-methods#santander-consumer)
@@ -31,7 +31,7 @@ To know how to choose from the available methods and integrate them with Checkou
 
 ## Supported payment types
 
-At the moment, only [single payments](/concepts/payment-types#single) are accepted by Checkout. In the future, we plan to extend Checkout's support to [frequent payments](/concepts/payment-types#frequent) and [subscriptions](/concepts/payment-types#subscription).
+Both [single](/concepts/payment-types#single) and [frequent](/concepts/payment-types#frequent) payments are accepted by Checkout. In the future, we plan to extend Checkout's support to [subscriptions](/concepts/payment-types#subscription).
 
 ## Integration methods
 

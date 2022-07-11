@@ -12,3 +12,20 @@
   border-radius: 25px;
   background: var(--scrollbar-thumb);
 }
+
+.ep-protocol-list ul,
+.ep-protocol-list ul ul,
+.ep-protocol-list li,
+.ep-protocol-list li p {
+  margin-top: 0.6em;
+  margin-bottom: 0.6em;
+}
+
+.ep-protocol-list details {
+  border-left: 2px solid #aaa;
+  padding-left: 0.6em;
+}
+
+.ep-protocol-list details summary {
+  cursor: pointer;
+}

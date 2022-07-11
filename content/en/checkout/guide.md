@@ -21,7 +21,7 @@ An example app that demonstrates the steps described in this guide is available 
 
 ## Creating a checkout session
 
-To begin a Checkout session, you are required to send a server-to-server `POST` request to the [`/checkout`](/checkout/reference#checkout) endpoint.
+To create a Checkout session, you are required to send a server-to-server `POST` request to the [`/checkout`](/checkout/reference#checkout) endpoint. The created session will have an expiration time of 30 minutes, after which the users won't be able to pay that specific Checkout anymore.
 
 Like all API requests, this request is authenticated as described in [Authentication](/first-steps/necessary-data#authentication), which means you must include the `AccountId` and `ApiKey` headers.
 
