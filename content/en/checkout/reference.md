@@ -53,7 +53,7 @@ An object with the following properties:
         - `id`: `string` with the uuid of the account.
     - `descriptive`: `string` (<= 255 characters) with the description of the capture. Will be displayed in the bank statement or in the MB WAY application. (*required*)
     </details>
-  - `expiration_time`: Optional `string` in the format `'Y-m-d H:i'` with the last possible time to make the payment. Applicable in Multibanco payments and Virtual IBAN.  
+  - `expiration_time`: Optional `string` in the format `'Y-m-d H:i'` with the last possible time to make the payment. Applicable in Multibanco payments.  
     **Note**: This does not affect checkout session expiration (which is 30 minutes).
   - `currency`: `string` with the currency. Available currencies are `'EUR'` (*default*) and `'BRL'`.
   - `key`: `string` (<= 50 characters) with the merchant's key for identifying the payment.
@@ -149,15 +149,71 @@ An object with the following properties:
 - A `CheckoutInstance` object, containing the following method:
   - `unmount()`: Removes all Checkout form content and event listener.
 
+<br>
+
 #### Success handler:
 
-`onSuccess(checkoutPaymentInfo)`
+`onSuccess(successInfo)`
 
-Receives an object with the following property:
+Receives an object with the following properties:
 
-| Property | Type      | Description                                                                                                                                 |
-| -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `paid`   | `boolean` | Whether the payment was completed (for synchronous methods, e.g. credit card) or not (for asynchronous methods, e.g. Multibanco reference). |
+| Property  | Type      | Description                                                                        |
+| --------- | --------- | ---------------------------------------------------------------------------------- |
+| `id`      | `string`  | The id of the Checkout session.                                                    |
+| `type`    | `string`  | The payment type for this Checkout (`'single'`, `'frequent'` or `'subscription'`). |
+| `payment` | `Object`  | Detailed information about the payment.                                            |
+
+Properties of the `payment` Object:
+
+**Note**: Some properties only appear with certain payment methods.
+
+| Property         | Method       | Type      | Description                                                                      |
+| ---------------- | ------------ | --------- | -------------------------------------------------------------------------------- |
+| `id`             | All          | `string`  | The payment's id.                                                                |
+| `method` (1)     | All          | `string`  | The payment method chosen by the customer.                                       |
+| `status` (2)     | All          | `Object`  | The status of the payment.                                                       |
+| `value`          | All          | `number`  | The order value, rounded to two decimal places. Not used in `frequent` payments. |
+| `entity`         | Multibanco   | `string`  | The Multibanco entity.                                                           |
+| `reference`      | Multibanco   | `string`  | The Multibanco reference.                                                        |
+| `expirationDate` | Multibanco   | `string`  | The expiration date for the payment.                                             |
+| `sddMandate` (3) | Direct Debit | `Object`  | SEPA Direct Debit mandate.                                                       |
+
+(1) Possible method values are the same as in the [Checkout creation](/reference#checkout).
+
+(2) Possible payment status values:
+<details><summary>Expand</summary>
+
+- `'authorised'`
+- `'deleted'`
+- `'enrolled'`
+- `'error'`
+- `'failed'`
+- `'paid'`
+- `'pending'`
+- `'success'`
+- `'tokenized'` (To be used later in `frequent` payments.)
+- `'voided'`
+</details>
+
+(3) Properties of the `sddMandate` Object:
+<details><summary>Expand</summary>
+
+| Property        | Type     | Description                                                           |
+| --------------- | -------- | --------------------------------------------------------------------- |
+| `accountHolder` | `string` | Name of the account holder.                                           |
+| `billingEntity` | `string` | The billing entity for the payments.                                  |
+| `countryCode`   | `string` | Country code of the phone number.                                     |
+| `email`         | `string` | The customer's e-mail address.                                        |
+| `iban`          | `string` | The IBAN.                                                             |
+| `id`            | `string` | The mandate's id.                                                     |
+| `maxNumDebits`  | `string` | The maximum number of debits allowed for this Direct Debit.           |
+| `name`          | `string` | The customer's name. May be different from the account holder's name. |
+| `phone`         | `string` | The customer's phone number.                                          |
+| `referenceAdc`  | `string` | The authorization reference.                                          |
+
+</details>
+
+<br>
 
 #### Error handler:
 

@@ -158,16 +158,12 @@ checkoutInstance.unmount()
 It will often be useful to know when users finish the Checkout process, so you can hide the Checkout contents and display a thank you message.
 The SDK includes a callback parameter that you can pass to get notified when the Checkout process is succesfully completed.
 
-Your callback function can receive a parameter with additional details about the outcome of the Checkout process. For now, the only additional information is whether the payment was completed (synchronous payment method) or not (asynchronous payment method). You can check the differences in the [payment methods documentation](/concepts/payment-methods).
+Your callback function can receive a parameter with additional details about the outcome of the Checkout process. The full reference of the details is available on the [reference page](/checkout/reference#sdk).
 
 ```javascript
-function mySuccessHandler(checkoutPaymentInfo) {
+function mySuccessHandler(checkoutSuccessInfo) {
   checkoutInstance.unmount()
-  if (checkoutPaymentInfo.paid) {
-    document.write('Your payment was received. Thank you.')
-  } else {
-    document.write('Your order was received and is now awaiting payment. Thank you.')
-  }
+  document.write('Your order was received. Thank you.')
 }
 
 const checkoutInstance = startCheckout(manifest, {
