@@ -175,4 +175,5 @@ The error `code` has the following possible values and recommended solutions:
 | ------------------ | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `checkout-expired` | The Checkout session has expired. | Create a new Checkout session with the server-to-server call and use the newly returned Manifest to instantiate a new Checkout form. |
 | `already-paid`     | The Checkout was already paid.    | Refresh the order information and confirm that it was paid. Give feedback to the user accordingly.                                   |
+| `checkout-canceled`     | The Checkout was canceled.    | Create a new Checkout session with the server-to-server call and use the newly returned Manifest to instantiate a new Checkout form.                                   |
 | `generic-error`    | An unspecified error occurred.    | Since the root cause is unclear, you can try creating a new session or signal an error to the user.                                  |
