@@ -174,7 +174,7 @@ const checkoutInstance = startCheckout(manifest, {
 ### Reacting to Checkout errors
 
 The Checkout process is resilient to most forms of errors and allows the customer to retry multiple times with different payment methods until the payment is completed.
-However, there are cases where the Checkout form is unable to recover on its own, such as an expired Checkout session or an attempt to pay a Checkout that was already paid.
+However, there are cases where the Checkout form is unable to recover on its own, such as an expired Checkout session, an attempt to pay a Checkout that was already paid or a Checkout that was canceled.
 
 You can be notified of such cases by passing the callback parameter `onError`:
 
@@ -191,6 +191,9 @@ function myErrorHandler(error) {
       break
     case 'already-paid':
       document.write('Your order was already paid. Thank you.')
+      break
+    case 'checkout-canceled':
+      document.write('Your checkout was canceled.')
       break
     default:
       document.write('Unable to process payment, please try again.')
