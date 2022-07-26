@@ -178,7 +178,7 @@ Properties of the `payment` Object:
 | `expirationDate` | Multibanco   | `string`  | The expiration date for the payment.                                             |
 | `sddMandate` (3) | Direct Debit | `Object`  | SEPA Direct Debit mandate.                                                       |
 
-(1) Possible method values are the same as in the [Checkout creation](/reference#checkout).
+(1) Possible method values are the same as in the [Checkout creation](/checkout/reference#checkout).
 
 (2) Possible payment status values:
 <details><summary>Expand</summary>
