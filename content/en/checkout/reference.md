@@ -9,9 +9,9 @@ category: Checkout
 
 [API URLs](/api/overview#urls)
 
-### `/checkout`
+### Create Checkout session
 
-`POST`
+`POST` `/checkout`
 
 Creates a Checkout Session. 
 
@@ -42,9 +42,9 @@ An object with the following properties:
     
     - `transaction_key`: `string` (<= 50 characters) with the internal key used to identify this transaction in the merchant's database.
     - `capture_date`: `string` in the format `'Y-m-d'` with the capture date.
-    - `account`: *optional* `Object` for multi-account clients.
+    - `account`: `Object` for multi-account clients.
       - `id`: `string` with the uuid of the account.
-    - `splits`: *optional* `Array` of `Object`s used in split payments. Each `Object` has the following properties:
+    - `splits`: `Array` of `Object`s used in split payments. Each `Object` has the following properties:
       - `split_key`: `string` (<= 50 characters) with the merchant's internal key for identifying the split.
       - `split_descriptive`: `string` (<= 255 characters) with the description of the split.
       - `value`: `number` the split funds, rounded to 2 decimals. (*required*)
@@ -55,14 +55,14 @@ An object with the following properties:
         - `id`: `string` with the uuid of the account.
     - `descriptive`: `string` (<= 255 characters) with the description of the capture. Will be displayed in the bank statement or in the MB WAY application. (*required*)
     </details>
-  - `expiration_time`: Optional `string` in the format `'Y-m-d H:i'` with the last possible time to make the payment. Applicable in Multibanco payments.  
+  - `expiration_time`: `string` in the format `'Y-m-d H:i'` with the last possible time to make the payment. Applicable in Multibanco payments.  
     **Note**: This does not affect checkout session expiration (which is 30 minutes).
   - `currency`: `string` with the currency. Available currencies are `'EUR'` (*default*) and `'BRL'`.
   - `key`: `string` (<= 50 characters) with the merchant's key for identifying the payment.
   - `sdd_mandate`: `Object` *required* if `method` is `dd` (Direct Debit):
     <details><summary>Expand</summary>
 
-    - `id`: Optional `string` to identify this Mandate.
+    - `id`: `string` to identify this Mandate.
     - `iban`: `string` (<= 34 characters). (*required*)
     - `key`: `string` (<= 255 characters) with the merchant's key to identify this Mandate.
     - `name`: `string` (<= 100 characters). (*required*)
@@ -70,7 +70,7 @@ An object with the following properties:
     - `phone`: `string` (<= 20 characters). (*required*)
     - `account_holder`: `string` (<= 100 characters) with the name of the Bank account holder. (*required*)
     - `country_code`: `string` Bank account country code.
-    - `max_num_debits`: Optional `string` with the maximum number of debits allowed in the SDD Mandate.
+    - `max_num_debits`: `string` with the maximum number of debits allowed in the SDD Mandate.
     </details>
   <br>
 
@@ -95,14 +95,14 @@ An object with the following properties:
     - `key`: `string` with the merchant's key to identify the item.
     - `description`: `string` with a description of the item.
     - `quantity`: `number` of this item being paid.
-    - `value`: `number`, the price (rounded to 2 decimals) being paid for the specific item(s).
+    - `value`: `number`, the price being paid for the specific item(s), rounded to 2 decimals.
   - `key`: `string` with the merchant's key to identify the order.
-  - `value`: `number`, the price (rounded to 2 decimals) being paid for the entire order. (*required*)
+  - `value`: `number`, the price being paid for the entire order, rounded to 2 decimals. (*required*)
   </details>
 - `customer`: `Object` with the customer details. (*required*)
   <details><summary>Expand</summary>
 
-  - `id`: Optional `string` with the uuid of a previously created customer.
+  - `id`: `string` with the uuid of a previously created customer.
   - `name`: `string` (<= 255 characters) with the customer's name. (*required*)
   - `email`: `string` (<= 70 characters) with the customer's email. (*required*)
   - `phone`: `string` (<= 15 characters) with the customer's phone number. (*required*)
@@ -121,13 +121,25 @@ An object with the following properties:
 - 429 Too Many Requests
 - 500 Internal Error
 
+#### Return value
+
+Returns a JSON Object (referred to as a *Checkout Manifest*) with the following properties:
+
+<div class="ep-protocol-list">
+
+- `id`: `string` with the Checkout session id.
+- `session`: `string` with a session token to be used by the rest of the Checkout process.
+- `config`: *deprecated* `Object` with configuration properties.
+
+</div>
+
 ## SDK
 
 ### `startCheckout(manifest, [options])`
 
 #### Parameters:
 
-- `manifest`: The return object from the [checkout service](#checkout).
+- `manifest`: The return object from the [checkout service](#create-checkout-session).
 - `options`: An optional object containing any of the following properties:
   | Option        | Type       | Required | Default            | Description                                                                |
   | ------------- | ---------- | -------- | ------------------ | -------------------------------------------------------------------------- |
@@ -180,7 +192,7 @@ Properties of the `payment` Object:
 | `expirationDate` | Multibanco   | `string`  | The expiration date for the payment.                                             |
 | `sddMandate` (3) | Direct Debit | `Object`  | SEPA Direct Debit mandate.                                                       |
 
-(1) Possible method values are the same as in the [Checkout creation](/checkout/reference#checkout).
+(1) Possible method values are the same as in the [Checkout creation](/checkout/reference#create-checkout-session).
 
 (2) Possible payment status values:
 <details><summary>Expand</summary>

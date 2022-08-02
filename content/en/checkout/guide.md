@@ -21,7 +21,7 @@ An example app that demonstrates the steps described in this guide is available 
 
 ## Creating a checkout session
 
-To create a Checkout session, you are required to send a server-to-server `POST` request to the [`/checkout`](/checkout/reference#checkout) endpoint. The created session will have an expiration time of 30 minutes, after which the users won't be able to pay that specific Checkout anymore.
+To create a Checkout session, you are required to send a server-to-server `POST` request to the [`/checkout`](/checkout/reference#create-checkout-session) endpoint. The created session will have an expiration time of 30 minutes, after which the users won't be able to pay that specific Checkout anymore.
 
 Like all API requests, this request is authenticated as described in [Authentication](/first-steps/necessary-data#authentication), which means you must include the `AccountId` and `ApiKey` headers.
 
@@ -61,7 +61,7 @@ An example payload is:
 }
 ```
 
-You can check all the possible parameters in the [Checkout reference](/checkout/reference#checkout).
+You can check all the possible parameters in the [Checkout reference](/checkout/reference#create-checkout-session).
 
 The service will return something like:
 
@@ -170,6 +170,73 @@ const checkoutInstance = startCheckout(manifest, {
   onSuccess: mySuccessHandler,
 })
 ```
+
+### Saving frequent payment information
+
+Processing a frequent payment means you have to save tokenized payment details to later use them to actually transfer funds.
+
+To create a frequent payment Checkout session, your initial `POST` request to `/checkout` will have to include the `type` property set to `['frequent']`.
+
+After the user selects a payment method and fills in their details (if any), the SDK will call the success handler with the result information. It is at this point that you should send the `payment.id` field to your server.
+
+```javascript
+function saveTokenizedPayment(checkoutSuccessInfo) {
+  checkoutInstance.unmount()
+  document.write('Your payment details were saved. Thank you.')
+  sendTokenToServer(checkoutSuccessInfo.payment.id)
+}
+
+const checkoutInstance = startCheckout(manifest, {
+  onSuccess: saveTokenizedPayment,
+})
+```
+
+From then on, you can use the payment ID to send server-to-server requests capturing funds.
+
+Each capture is created by sending a `POST` request to the `/capture/<payment id>` endpoint. The request must be authenticated with the AccountId and ApiKey headers as usual.
+The payload has to include at least the `descriptive` and `value` for the capture. Learn more in the [service reference](/api/payments#capture-payment).
+
+```json
+{
+  "descriptive": "Purchase in MyStore",
+  "value": 20 
+}
+```
+
+On success, the service will return something similar to:
+
+```json
+{
+  "status": "ok",
+  "message": ["Your request was successfully created"],
+  "id": "c68d8d1a-4c95-4a87-b9b5-031057b3a68e"
+}
+```
+
+You can use the resulting capture `id` to get information about the specific capture by issuing an authenticated `GET` request to `/capture/<capture id>`. Learn more in the [service reference](/api/payments#get-capture-details).
+
+It will reply with the capture details:
+
+```json
+{
+  "account": {
+    "id": "1a398de4-d318-48fc-a9fd-230f863dc0e1"
+  },
+  "capture_date": "2022-08-02",
+  "descriptive": "Purchase in MyStore",
+  "force_3ds":false,
+  "id": "c68d8d1a-4c95-4a87-b9b5-031057b3a68e",
+  "payment_id": "76ab3c32-7883-459f-a0ef-5fe0541e0ec7",
+  "payment_type": "frequent",
+  "status": "success",
+  "transaction_key": "",
+  "value": 20
+}
+```
+
+**Note**: for frequent Multibanco Reference payments, no capture request is necessary. It's the customer's responsibility to make new payments to the same reference.
+
+If you wish to be notified each time a payment is successful, follow our [Notifications documentation](/api/notifications).
 
 ### Reacting to Checkout errors
 
