@@ -7,11 +7,13 @@ category: Checkout
 
 ## API
 
+[API URLs](/api/overview#urls)
+
 ### `/checkout`
 
 `POST`
 
-Creates a Checkout Session.
+Creates a Checkout Session. 
 
 #### Parameters:
 

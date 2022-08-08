@@ -5,6 +5,19 @@ position: 40
 category: API
 ---
 
+## URLs
+
+The API endpoints are available through the following domains:
+
+- For test environment:
+  ```bash
+    https://api.test.easypay.pt/
+  ```
+- For production environment:
+  ```bash
+    https://api.prod.easypay.pt/
+  ```
+
 ## Errors
 
 Easypay uses HTTP response status codes to indicate the success or failure of your API requests. If your request fails, Easypay returns an error using the appropriate status code.
