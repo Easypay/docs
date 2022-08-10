@@ -21,7 +21,7 @@ An example app that demonstrates the steps described in this guide is available 
 
 ## Creating a checkout session
 
-To create a Checkout session, you are required to send a server-to-server `POST` request to the [`/checkout`](/checkout/reference#create-checkout-session) endpoint. The created session will have an expiration time of 30 minutes, after which the users won't be able to pay that specific Checkout anymore.
+To create a Checkout session, you are required to send a server-to-server `POST` request to the [`/checkout`](/checkout/reference#create-checkout-session) endpoint. The created session will have an expiration time of 30 minutes at most, after which the users won't be able to pay that specific Checkout anymore.
 
 Like all API requests, this request is authenticated as described in [Authentication](/first-steps/necessary-data#authentication), which means you must include the `AccountId` and `ApiKey` headers.
 
@@ -34,7 +34,7 @@ An example payload is:
     "methods": ["cc", "mb", "mbw", "dd", "vi", "uf", "sc"],
     "type": "sale",
     "capture": {
-      "descriptive": "Descriptive Example"
+      "descriptive": "Purchase in MyStore"
     },
     "currency": "EUR",
     "expiration_time": null
@@ -54,10 +54,9 @@ An example payload is:
         "value": 7
       }
     ],
-    "key": "order-key",
+    "key": "order-123",
     "value": 19.5
-  },
-  "customer": null
+  }
 }
 ```
 
@@ -237,6 +236,66 @@ It will reply with the capture details:
 **Note**: for frequent Multibanco Reference payments, no capture request is necessary. It's the customer's responsibility to make new payments to the same reference.
 
 If you wish to be notified each time a payment is successful, follow our [Notifications documentation](/api/notifications).
+
+### Accepting subscriptions
+
+For periodical payments with a set frequency, you can accept subscription payments in Checkout.
+
+To do so, you will need to specify a payment `type` of `["subscription"]`.
+
+You will also need to define:
+- A `payment.start_time`, that determines when the subscription payments start. The start time must be in the future.
+- A `payment.frequency` that sets the periodicity of the payments (weekly, monthly, etc). Available values are:
+  - `"1D"` (daily)
+  - `"1W"` (weekly)
+  - `"2W"` (biweekly)
+  - `"1M"` (monthly)
+  - `"2M"` (bimonthly)
+  - `"3M"` (trimonthly)
+  - `"4M"` (quadmonthly)
+  - `"6M"` (semiannually)
+  - `"1Y"` (annually)
+  - `"2Y"` (biannually)
+  - `"3Y"` (triannually)
+- Either a `payment.expiration_time` or a `payment.max_captures`, so that the subscription has an end eventually.
+
+Check the [reference](/checkout/reference#checkout) for additional details and all the available properties.
+
+An example request payload would therefore be:
+
+```json
+{
+  "type": ["subscription"],
+  "payment": {
+    "methods": ["cc", "dd"],
+    "type": "sale",
+    "capture": {
+      "descriptive": "Purchase in MyStore"
+    },
+    "start_time": "2023-01-01 00:00",
+    "frequency": "1M",
+    "expiration_time": "2030-12-31 23:59"
+  },
+  "order": {
+    "items": [
+      {
+        "description": "My streaming service",
+        "quantity": 1,
+        "key": "streaming-service",
+        "value": 12.5
+      }
+    ],
+    "key": "order-123",
+    "value": 12.5
+  }
+}
+```
+
+After typing their details, the customer would then see a confirmation dialog for the subscription:
+
+![Subscription](/checkout/subscription.png)
+
+Pressing the proceed button allows to continue on with the payment method selection and the remaining interaction is the same as for single and frequent payments.
 
 ### Reacting to Checkout errors
 
