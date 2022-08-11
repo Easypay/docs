@@ -21,7 +21,7 @@ Supported methods for frequent payments are: Credit Card, MB WAY, Multibanco, an
 
 ## Subscription
 
-Subscriptions are periodic payments of the same amount of money, configured solely through our [Payments API](/api/payments). Checkout support will be coming soon.
+Subscriptions are periodic payments of the same amount of money, configured through [Checkout](/checkout/overview) or our [Payments API](/api/payments).
 
 Subscriptions support a number of different frequencies, ranging from daily to once every three years. Their last payment can be determined by the end date of the subscription, as well as the total number of payments captured. They also support a configurable number of retries for each capture in case of failure, as well as falling back to another (single) payment method if the recurring one is not successful.
 

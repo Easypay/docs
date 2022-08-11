@@ -31,7 +31,7 @@ To know how to choose from the available methods and integrate them with Checkou
 
 ## Supported payment types
 
-Both [single](/concepts/payment-types#single) and [frequent](/concepts/payment-types#frequent) payments are accepted by Checkout. In the future, we plan to extend Checkout's support to [subscriptions](/concepts/payment-types#subscription).
+Both [single](/concepts/payment-types#single) and [frequent](/concepts/payment-types#frequent) payments, as well as [subscriptions](/concepts/payment-types#subscription) are accepted by Checkout.
 
 ## Integration methods
 

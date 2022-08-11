@@ -21,7 +21,7 @@ An object with the following properties:
 
 <div class="ep-protocol-list">
 
-- `type`: `Array` with a `string` representing which [payment type](/concepts/payment-types) this Checkout session should accept. Either `['single']` or `['frequent']` are supported.  
+- `type`: `Array` with a `string` representing which [payment type](/concepts/payment-types) this Checkout session should accept. Either `['single']`, `['frequent']` or `['subscription']` are supported.  
   Only the first value in the `Array` is considered (e.g. `['single', 'frequent']` would be equivalent to `['single']`). (*required*)
 - `payment`: `Object` describing the payment configuration. (*required*)
   <details><summary>Expand</summary>
@@ -56,22 +56,9 @@ An object with the following properties:
     - `descriptive`: `string` (<= 255 characters) with the description of the capture. Will be displayed in the bank statement or in the MB WAY application. (*required*)
     </details>
   - `expiration_time`: `string` in the format `'Y-m-d H:i'` with the last possible time to make the payment. Applicable in Multibanco payments.  
-    **Note**: This does not affect checkout session expiration (which is 30 minutes).
+    **Note**: If the expiration time is less than the default checkout session expiration (which is 30 minutes), the user won't be able to interact with the Checkout after that time.
   - `currency`: `string` with the currency. Available currencies are `'EUR'` (*default*) and `'BRL'`.
   - `key`: `string` (<= 50 characters) with the merchant's key for identifying the payment.
-  - `sdd_mandate`: `Object` *required* if `method` is `dd` (Direct Debit):
-    <details><summary>Expand</summary>
-
-    - `id`: `string` to identify this Mandate.
-    - `iban`: `string` (<= 34 characters). (*required*)
-    - `key`: `string` (<= 255 characters) with the merchant's key to identify this Mandate.
-    - `name`: `string` (<= 100 characters). (*required*)
-    - `email`: `string` (<= 50 characters). (*required*)
-    - `phone`: `string` (<= 20 characters). (*required*)
-    - `account_holder`: `string` (<= 100 characters) with the name of the Bank account holder. (*required*)
-    - `country_code`: `string` Bank account country code.
-    - `max_num_debits`: `string` with the maximum number of debits allowed in the SDD Mandate.
-    </details>
   <br>
 
   Additional options for ***frequent*** payments:
@@ -216,7 +203,7 @@ Properties of the `payment` Object:
 | --------------- | -------- | --------------------------------------------------------------------- |
 | `accountHolder` | `string` | Name of the account holder.                                           |
 | `billingEntity` | `string` | The billing entity for the payments.                                  |
-| `countryCode`   | `string` | Country code of the phone number.                                     |
+| `countryCode`   | `string` | Country code of the bank account.                                     |
 | `email`         | `string` | The customer's e-mail address.                                        |
 | `iban`          | `string` | The IBAN.                                                             |
 | `id`            | `string` | The mandate's id.                                                     |
