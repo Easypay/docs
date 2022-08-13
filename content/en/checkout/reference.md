@@ -30,8 +30,8 @@ An object with the following properties:
 
     The available methods are:
       - `'cc'` (Credit Card)
-      - `'mbw'` (MB WAY)
-      - `'mb'` (Multibanco)
+      - `'mbw'` (MB WAY; *only available for **single** or **frequent** payments*)
+      - `'mb'` (Multibanco; *only available for **single** or **frequent** payments*)
       - `'dd'` (Direct Debit)
       - `'vi'` (Virtual IBAN; *only available for **single** payments*)
       - `'uf'` (Universo Flex; *only available for **single** payments*)
