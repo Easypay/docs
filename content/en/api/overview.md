@@ -7,6 +7,7 @@ category: API
 
 The easypay API is a collection of web services that allow you to receive payments from customers, be notified of those payments, refund them if necessary, among others.
 
+A more thorough reference can be found in https://api.prod.easypay.pt/docs.
 ## URLs
 
 The API endpoints are available through the following domains:
