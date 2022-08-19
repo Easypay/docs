@@ -7,15 +7,7 @@ category: Checkout
 
 ## Requirements
 
-Before using Checkout, you will need the following:
-
-<!-- Copied from the current Docs.
-     TODO: Clearer explanation after the relevant sections are written -->
-
-- An easypay account configured for the new APIs
-- A CIN with CCs configured
-
-Refer to [Configuration of Necessary Data](/first-steps/necessary-data) if you're missing any of the above.
+Before using Checkout, you will need an [easypay payment account](https://www.easypay.pt/en/onboarding-on-the-website/). 
 
 An example app that demonstrates the steps described in this guide is available at https://github.com/Easypay/checkout-demo .
 
@@ -23,7 +15,7 @@ An example app that demonstrates the steps described in this guide is available 
 
 To create a Checkout session, you are required to send a server-to-server `POST` request to the [`/checkout`](/checkout/reference#create-checkout-session) endpoint. The created session will have an expiration time of 30 minutes at most, after which the users won't be able to pay that specific Checkout anymore.
 
-Like all API requests, this request is authenticated as described in [Authentication](/first-steps/necessary-data#authentication), which means you must include the `AccountId` and `ApiKey` headers.
+Like all API requests, this request is authenticated as described in [Authentication](/api/overview#authentication), which means you must include the `AccountId` and `ApiKey` headers.
 
 An example payload is:
 
