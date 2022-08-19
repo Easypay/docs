@@ -23,7 +23,26 @@ The API endpoints are available through the following domains:
 
 ## Authentication
 
-As explained in [Configuration of Necessary Data](/first-steps/necessary-data#authentication), you must use your AccountId and ApiKey to authenticate requests to the API by setting the correct headers.
+To create credentials for your account you can follow [this guide](https://www.easypay.pt/en/como-gerar-chaves-de-autenticacao-2/). 
+
+Server-to-server requests to easypay APIs must be authenticated via **Account ID** and **API Key**.
+To do so, include the following HTTP headers in your API requests:
+
+```
+AccountId: <YOUR_ACCOUNT_ID>
+ApiKey: <YOUR_API_KEY>
+```
+
+When these headers are missing or incorrect, a `403` HTTP status code is returned.
+
+For your convenience, during tests you can use the following ID/Key pair:
+
+```
+AccountId: 2b0f63e2-9fb5-4e52-aca0-b4bf0339bbe6
+ApiKey: eae4aa59-8e5b-4ec2-887d-b02768481a92
+```
+
+These will **only work for testing purposes** and **won't work** in production.
 
 ## Errors
 
