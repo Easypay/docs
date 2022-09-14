@@ -133,7 +133,7 @@ Returns a JSON Object (referred to as a *Checkout Manifest*) with the following 
   | `id`          | `string`   | no       | `easypay-checkout` | The id of the HTML element where the Checkout form should be included.     |
   | `onSuccess`   | `function` | no       | `() => {}`         | Callback function to be called when the Checkout is finished successfully. |
   | `onError`     | `function` | no       | `() => {}`         | Callback function to be called on errors.                                  |
-  | `onClose`     | `function` | no       | `undefined`        | Callback function to be called when the Checkout popup is closed.          |
+  | `onClose`     | `function` | no       | `undefined`        | Callback function to be called when the Checkout interaction is closed.    |
   | `testing`     | `boolean`  | no       | `false`            | Whether to use the testing API (`true`) or the production one (`false`).   |
   | `display`(1)  | `string`   | no       | `inline`           | The display style of the element that hosts the Checkout.                  |
   | `hideDetails` | `boolean`  | no       | `false`            | Whether to hide the details form or not. An expandable summary will be shown with the details, instead. |

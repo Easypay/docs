@@ -38,17 +38,31 @@ easypayCheckout.startCheckout(manifest, {
 })
 ```
 
-If you were using the `modal.onCancel`, `modal.onClose` or `modal.onComplete` options, add the desired success/close behaviour:
+If you were using the `modal.onCancel`, `modal.onClose` or `modal.onComplete` options, add the desired success/close behaviour(s):
 
 ```javascript
+
+let successfulPaymentInteraction = false
+
+function mySuccessHandler() {
+  successfulPaymentInteraction = true
+  // Previous modal.onComplete behaviour
+}
+
+function myCloseHandler() {
+  if (successfulPaymentInteraction) {
+    // Previous modal.onClose behaviour
+  } else {
+    // Previous modal.onCancel behaviour
+  }
+}
+
 easypayCheckout.startCheckout(manifest, {
   display: 'popup',
   onSuccess: mySuccessHandler,
-  onClose: myPopupClosedHandler,
+  onClose: myCloseHandler,
 })
 ```
-
-Your `onClose` should perform the same behaviour as your previous `modal.onCancel`, and the `onSuccess` handler should combine the behaviour of `modal.onComplete` and `modal.onClose`, since the events now happen simultaneously.
 
 ### UI Configuration
 

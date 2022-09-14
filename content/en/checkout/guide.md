@@ -144,21 +144,49 @@ When you no longer wish to display the Checkout contents, call the `unmount()` m
 checkoutInstance.unmount()
 ```
 
-### Reacting to Checkout completion
+### Reacting to successful payment interactions
 
-It will often be useful to know when users finish the Checkout process, so you can hide the Checkout contents and display a thank you message.
-The SDK includes a callback parameter that you can pass to get notified when the Checkout process is succesfully completed.
+Even before the Checkout process is completed (by the user pressing the End button or closing the popup), the Checkout SDK is able to notify you of a successful payment interaction.
 
-Your callback function can receive a parameter with additional details about the outcome of the Checkout process. The full reference of the details is available on the [reference page](/checkout/reference#sdk).
+This doesn't necessarily mean that the funds were transferred, but that no more user interaction with the Checkout is needed.
+
+For instance, for a Credit Card payment, this means that the user successfully authorized the operation, and for Multibanco payments this means the user has requested the entity and reference values to pay later.
 
 ```javascript
 function mySuccessHandler(checkoutSuccessInfo) {
-  checkoutInstance.unmount()
-  document.write('Your order was received. Thank you.')
+  // There was a successful payment interaction
+  // You can react to details in checkoutSuccessInfo
 }
 
 const checkoutInstance = startCheckout(manifest, {
   onSuccess: mySuccessHandler,
+})
+```
+
+Your callback function can receive a parameter with additional details about the outcome of the payment process. The full reference of the details is available on the [reference page](/checkout/reference#sdk).
+### Reacting to Checkout UI close
+
+It will often be useful to know when users finish the Checkout process, so you can hide the Checkout contents and display a thank you message.
+The SDK includes a callback parameter that you can pass to get notified when the Checkout process is closed. In inline mode, this always means that the user finished a payment interaction, but in popup mode the user can choose to close the Checkout popup without finishing a payment interaction.
+
+
+```javascript
+let successfulPaymentInteraction = false
+
+function mySuccessHandler(checkoutSuccessInfo) {
+  successfulPaymentInteraction = true
+}
+
+function myCloseHandler() {
+  if (successfulPaymentInteraction) {
+    checkoutInstance.unmount()
+    document.write('Your order was received. Thank you.')
+  }
+}
+
+const checkoutInstance = startCheckout(manifest, {
+  onSuccess: mySuccessHandler,
+  onClose: myCloseHandler,
 })
 ```
 
@@ -172,8 +200,6 @@ After the user selects a payment method and fills in their details (if any), the
 
 ```javascript
 function saveTokenizedPayment(checkoutSuccessInfo) {
-  checkoutInstance.unmount()
-  document.write('Your payment details were saved. Thank you.')
   sendTokenToServer(checkoutSuccessInfo.payment.id)
 }
 
