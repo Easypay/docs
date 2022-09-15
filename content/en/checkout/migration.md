@@ -15,7 +15,7 @@ If you were using the [previous version of Checkout](https://api.prod.easypay.pt
 Replace the previous Checkout script with the new one:
 
 ```html
-<script src="https://cdn.easypay.pt/checkout/2.1.0/"></script>
+<script src="https://cdn.easypay.pt/checkout/2.2.0/"></script>
 ```
 
 > If you wish to further migrate to an NPM package, follow the guide to [install `@easypaypt/checkout-sdk`](/checkout/guide#npm-import).
