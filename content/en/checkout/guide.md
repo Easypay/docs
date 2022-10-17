@@ -73,7 +73,7 @@ This return object is referred to as a **Checkout manifest**, and will be needed
 Include the easypay Checkout SDK in your page:
 
 ```html
-<script src="https://cdn.easypay.pt/checkout/2.2.0/"></script>
+<script src="https://cdn.easypay.pt/checkout/2.3.0/"></script>
 ```
 
 Prepare an empty element in your page where you'd like the Checkout form to be and give it the `easypay-checkout` id:
@@ -377,3 +377,44 @@ function initEasypayCheckoutSDK(manifest) {
 Result:
 
 <img width="746" alt="Checkout Popup Mode" src="https://user-images.githubusercontent.com/30448483/172881494-7265ff97-d142-4fee-9a2b-047b986dbefc.png">
+
+### Changing Checkout's appearance
+
+Checkout supports a robust styling API that allows integrators to change its appearance in order to better blend it in their website.
+
+The list of customizations include:
+- An optional company logo to display in the header
+- The colors used in:
+  - The background
+  - Highlights (the more colorful sections of the page, originally blue)
+  - Buttons
+  - Input borders and backgrounds
+- Whether to use floating labels in the inputs
+- Whether to use box-shadow in the buttons
+- The font family used to render the text
+- The overall text size
+
+With a combination of some of these options, it's possible to change the Checkout entirely, fitting it in your website with ease.
+
+Example:
+
+```js
+const checkoutInstance = easypayCheckout.startCheckout(manifest, {
+  logoUrl: 'www.example.com/mylogo.png',
+  accentColor: 'orange',
+  buttonBackgroundColor: '#111',
+  buttonBoxShadow: false,
+  buttonBorderRadius: 5,
+  inputBorderRadius: 5,
+  inputBorderColor: '#000',
+  inputBackgroundColor: '#ffe7c4',
+  backgroundColor: '#eee',
+  fontFamily: 'https://fonts.gstatic.com/s/raleway/v28/1Ptxg8zYS_SKggPN4iEgvnHyvveLxVvaorCIPrEVIT9d0c8.woff2',
+})
+```
+
+Outcome:
+
+![Checkout](/checkout/stylingapi.png)
+
+To see every individual option in detail, check the [reference](/checkout/reference#examples-of-each-appearance-property).
