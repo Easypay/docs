@@ -15,7 +15,7 @@ If you were using the [previous version of Checkout](https://api.prod.easypay.pt
 Replace the previous Checkout script with the new one:
 
 ```html
-<script src="https://cdn.easypay.pt/checkout/2.2.0/"></script>
+<script src="https://cdn.easypay.pt/checkout/2.3.0/"></script>
 ```
 
 > If you wish to further migrate to an NPM package, follow the guide to [install `@easypaypt/checkout-sdk`](/checkout/guide#npm-import).
@@ -83,6 +83,6 @@ easypayCheckout.startCheckout(manifest, {
 })
 ```
 
-The remaining UI configuration options (CSS classes to apply to the elements) are not supported at the moment, as a richer styling API is being developed.
+To configure the remaining UI appearance, use the desired [styling options](/checkout/reference#examples-of-each-appearance-property).
 
-For more details and options, check the [Guide](/checkout/guide) and [Reference](/checkout/reference) pages.
+For all the details and options, check the [Guide](/checkout/guide) and [Reference](/checkout/reference) pages.

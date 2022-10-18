@@ -130,15 +130,27 @@ Returns a JSON Object (referred to as a *Checkout Manifest*) with the following 
 - `options`: An optional object containing any of the following properties:
   | Option        | Type       | Required | Default            | Description                                                                |
   | ------------- | ---------- | -------- | ------------------ | -------------------------------------------------------------------------- |
-  | `id`          | `string`   | no       | `easypay-checkout` | The id of the HTML element where the Checkout form should be included.     |
-  | `onSuccess`   | `function` | no       | `() => {}`         | Callback function to be called when the Checkout is finished successfully. |
-  | `onError`     | `function` | no       | `() => {}`         | Callback function to be called on errors.                                  |
-  | `onClose`     | `function` | no       | `undefined`        | Callback function to be called when the Checkout interaction is closed.    |
-  | `testing`     | `boolean`  | no       | `false`            | Whether to use the testing API (`true`) or the production one (`false`).   |
-  | `display`(1)  | `string`   | no       | `inline`           | The display style of the element that hosts the Checkout.                  |
-  | `hideDetails` | `boolean`  | no       | `false`            | Whether to hide the details form or not. An expandable summary will be shown with the details, instead. |
-  | `language`(2) | `string`   | no       | `undefined`        | The language in which to display the Checkout.                             |
-  | `logoUrl`     | `string`   | no       | `undefined`        | The merchant logo url to display in the Checkout.                          |
+  | `id`          | `string`   | no       | `'easypay-checkout'` | The id of the HTML element where the Checkout form should be included.     |
+  | `onSuccess`   | `function` | no       | `() => {}`           | Callback function to be called when the Checkout is finished successfully. |
+  | `onError`     | `function` | no       | `() => {}`           | Callback function to be called on errors.                                  |
+  | `onClose`     | `function` | no       | `undefined`          | Callback function to be called when the Checkout interaction is closed.    |
+  | `testing`     | `boolean`  | no       | `false`              | Whether to use the testing API (`true`) or the production one (`false`).   |
+  | `display`(1)  | `string`   | no       | `'inline'`           | The display style of the element that hosts the Checkout.                  |
+  | `hideDetails` | `boolean`  | no       | `false`              | Whether to hide the details form or not. An expandable summary will be shown with the details, instead. |
+  | `language`(2) | `string`   | no       | `undefined`          | The language in which to display the Checkout.                             |
+  | `logoUrl`               | `string`  | no       | `undefined`     | The merchant logo url to display in the Checkout.                           |
+  | `backgroundColor`       | `string`  | no       | `'#ffffff'`     | The color used as the background of the Checkout page.                      |
+  | `accentColor`           | `string`  | no       | `'#0d71f9'`     | The color used in highlights, as well as default buttons and input borders. |
+  | `errorColor`            | `string`  | no       | `'#ff151f'`     | The color used for errors.                                                  |
+  | `inputBackgroundColor`  | `string`  | no       | `'transparent'` | The color used for the input backgrounds.                                   |
+  | `inputBorderColor`      | `string`  | no       | *accentColor*   | The color for input borders.                                                |
+  | `inputBorderRadius`     | `number`  | no       | `50`            | The border radius for inputs, in `px`.                                      |
+  | `inputFloatingLabel`    | `boolean` | no       | `true`          | Whether inputs should use floating labels.                                  |
+  | `buttonBackgroundColor` | `string`  | no       | *accentColor*   | The color used for the button backgrounds.                                  |
+  | `buttonBorderRadius`    | `number`  | no       | `50`            | The border radius for buttons, in `px`.                                     |
+  | `buttonBoxShadow`       | `boolean` | no       | `true`          | Whether the buttons should have box-shadow.                                 |
+  | `fontFamily`            | `string`  | no       | `'Overpass'`    | The font used in the text.                                                  |
+  | `baseFontSize`          | `number`  | no       | `10`            | The value in `px` for the font size of the root element (`1rem`).           |
 
   ##### Options
 
@@ -234,3 +246,188 @@ The error `code` has the following possible values and recommended solutions:
 | `already-paid`     | The Checkout was already paid.    | Refresh the order information and confirm that it was paid. Give feedback to the user accordingly.                                   |
 | `checkout-canceled`     | The Checkout was canceled.    | Create a new Checkout session with the server-to-server call and use the newly returned Manifest to instantiate a new Checkout form.                                   |
 | `generic-error`    | An unspecified error occurred.    | Since the root cause is unclear, you can try creating a new session or signal an error to the user.                                  |
+
+#### Examples of each appearance property
+
+##### Changing the logo
+
+```js
+const checkoutInstance = easypayCheckout.startCheckout(manifest, {
+  logoUrl: 'www.example.com/mylogo.png'
+})
+```
+
+Outcome:
+
+![Checkout](/checkout/withlogo.png)
+
+##### Changing the background color
+
+
+```js
+const checkoutInstance = easypayCheckout.startCheckout(manifest, {
+  backgroundColor: '#222222'
+})
+```
+
+The text colors are automatically adjusted to shades of black or white depending on the background color, in order to achieve the best contrast possible.
+
+Outcome:
+
+![Checkout](/checkout/withbgcolor.png)
+
+
+##### Changing the accent color
+
+```js
+const checkoutInstance = easypayCheckout.startCheckout(manifest, {
+  accentColor: '#ffa861'
+})
+```
+
+The text colors (over the accent, such as in buttons) are automatically adjusted to black or white, in order to achieve the best contrast possible.
+
+Outcome:
+
+![Checkout](/checkout/withaccentcolor.png)
+
+
+##### Changing the error color
+
+```js
+const checkoutInstance = easypayCheckout.startCheckout(manifest, {
+  errorColor: '#d18800'
+})
+```
+
+Outcome:
+
+![Checkout](/checkout/witherrorcolor.png)
+
+
+##### Changing the input background color
+
+```js
+const checkoutInstance = easypayCheckout.startCheckout(manifest, {
+  inputBackgroundColor: '#001f3d'
+})
+```
+
+Outcome:
+
+![Checkout](/checkout/withinputbgcolor.png)
+
+
+##### Changing the input border color
+
+```js
+const checkoutInstance = easypayCheckout.startCheckout(manifest, {
+  inputBorderColor: '#000000'
+})
+```
+
+Outcome:
+
+![Checkout](/checkout/withinputbordercolor.png)
+
+
+##### Changing the input border radius
+
+```js
+const checkoutInstance = easypayCheckout.startCheckout(manifest, {
+  inputBorderRadius: 0
+})
+```
+
+Outcome:
+
+![Checkout](/checkout/withinputborderradius.png)
+
+
+##### Using non-floating labels
+
+```js
+const checkoutInstance = easypayCheckout.startCheckout(manifest, {
+  inputFloatingLabel: false
+})
+```
+
+Outcome:
+
+![Checkout](/checkout/withoutfloatinglabels.png)
+
+
+##### Changing button background color
+
+```js
+const checkoutInstance = easypayCheckout.startCheckout(manifest, {
+  buttonBackgroundColor: '#000000'
+})
+```
+
+The button text color is automatically adjusted to black or white, in order to achieve the best contrast possible.
+
+Outcome:
+
+![Checkout](/checkout/withbuttonbgcolor.png)
+
+
+##### Changing button border radius
+
+```js
+const checkoutInstance = easypayCheckout.startCheckout(manifest, {
+  buttonBorderRadius: 0
+})
+```
+
+Outcome:
+
+![Checkout](/checkout/withbuttonborderradius.png)
+
+
+##### Disabling button box-shadow
+
+```js
+const checkoutInstance = easypayCheckout.startCheckout(manifest, {
+  buttonBoxShadow: false
+})
+```
+
+Outcome:
+
+![Checkout](/checkout/withoutbuttonboxshadow.png)
+
+
+##### Changing font family
+
+```js
+const checkoutInstance = easypayCheckout.startCheckout(manifest, {
+  fontFamily: 'cursive'
+})
+```
+
+The `fontFamily` property can have three types of values:
+- Generic family name (e.g. `'sans-serif'`, `'serif'`, `'cursive'`)
+- Web safe font (e.g. `'arial'`, `'verdana'`)
+- Web font URL (e.g. `'https://fonts.gstatic.com/s/overpass/v12/qFda35WCmI96Ajtm83upeyoaX6QPnlo6_PPbM5qKl8Kuo8AzesE.woff2'`, must include the protocol `http`/`https`)
+
+Outcome:
+
+![Checkout](/checkout/withfontfamily.png)
+
+
+##### Changing base font size
+
+```js
+const checkoutInstance = easypayCheckout.startCheckout(manifest, {
+  baseFontSize: 8
+})
+```
+
+Changes the value in `px` for the font size of the root element (`1rem`). The default value is `10`, so any value below will reduce the font size, while a value above will increase it.
+
+Besides changing the size of the text (while keeping the proportions), this setting changes most of the layout dimensions, effectively increasing or decreasing the scale.
+
+Outcome:
+
+![Checkout](/checkout/withbasefontsize.png)
