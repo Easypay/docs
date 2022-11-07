@@ -73,7 +73,7 @@ This return object is referred to as a **Checkout manifest**, and will be needed
 Include the easypay Checkout SDK in your page:
 
 ```html
-<script src="https://cdn.easypay.pt/checkout/2.3.0/"></script>
+<script src="https://cdn.easypay.pt/checkout/2.4.0/"></script>
 ```
 
 Prepare an empty element in your page where you'd like the Checkout form to be and give it the `easypay-checkout` id:
@@ -95,6 +95,10 @@ easypayCheckout.startCheckout(manifest)
 ```
 
 And the Checkout should be running smoothly.
+
+### Testing
+
+<partial path="/en/checkout/_testing"></partial>
 
 ### NPM import
 
