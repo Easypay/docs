@@ -17,7 +17,7 @@ Frequent payments are repeatable transactions of varying sums without the client
 
 It is possible to limit the transferred sums by choosing minimum or maximum values, either to the total sum of the transactions or each individual transaction.
 
-Supported methods for frequent payments are: Credit Card, MB WAY, Multibanco, and Direct Debit.
+Supported methods for frequent payments are: Credit Card, MB WAY, Multibanco, Direct Debit, and Virtual IBAN.
 
 ## Subscription
 

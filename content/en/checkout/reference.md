@@ -33,7 +33,7 @@ An object with the following properties:
       - `'mbw'` (MB WAY; *only available for **single** or **frequent** payments*)
       - `'mb'` (Multibanco; *only available for **single** or **frequent** payments*)
       - `'dd'` (Direct Debit)
-      - `'vi'` (Virtual IBAN; *only available for **single** payments*)
+      - `'vi'` (Virtual IBAN; *only available for **single** or **frequent** payments*)
       - `'uf'` (Universo Flex; *only available for **single** payments*)
       - `'sc'` (Santander Consumer; *only available for **single** payments*)
   - `type`: `string` indicating the type of payment for Credit Card and MB WAY operations. Either `'sale'` (*default*) or `'authorisation'`.
