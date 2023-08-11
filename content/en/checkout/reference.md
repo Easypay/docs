@@ -128,16 +128,17 @@ Returns a JSON Object (referred to as a *Checkout Manifest*) with the following 
 
 - `manifest`: The return object from the [checkout service](#create-checkout-session).
 - `options`: An optional object containing any of the following properties:
-  | Option        | Type       | Required | Default            | Description                                                                |
-  | ------------- | ---------- | -------- | ------------------ | -------------------------------------------------------------------------- |
-  | `id`          | `string`   | no       | `'easypay-checkout'` | The id of the HTML element where the Checkout form should be included.     |
-  | `onSuccess`   | `function` | no       | `() => {}`           | Callback function to be called when the Checkout is finished successfully. |
-  | `onError`     | `function` | no       | `() => {}`           | Callback function to be called on errors.                                  |
-  | `onClose`     | `function` | no       | `undefined`          | Callback function to be called when the Checkout interaction is closed.    |
-  | `testing`     | `boolean`  | no       | `false`              | Whether to use the testing API (`true`) or the production one (`false`).   |
-  | `display`(1)  | `string`   | no       | `'inline'`           | The display style of the element that hosts the Checkout.                  |
-  | `hideDetails` | `boolean`  | no       | `false`              | Whether to hide the details form or not. An expandable summary will be shown with the details, instead. |
-  | `language`(2) | `string`   | no       | `undefined`          | The language in which to display the Checkout.                             |
+  | Option           | Type       | Required | Default              | Description                                                                |
+  | ---------------- | ---------- | -------- | -------------------- | -------------------------------------------------------------------------- |
+  | `id`             | `string`   | no       | `'easypay-checkout'` | The id of the HTML element where the Checkout form should be included.     |
+  | `onSuccess`      | `function` | no       | `() => {}`           | Callback function to be called when the Checkout is finished successfully. |
+  | `onError`        | `function` | no       | `() => {}`           | Callback function to be called on (unrecoverable) errors.                  |
+  | `onPaymentError` | `function` | no       | `() => {}`           | Callback function to be called on (recoverable) payment errors.            |
+  | `onClose`        | `function` | no       | `undefined`          | Callback function to be called when the Checkout interaction is closed.    |
+  | `testing`        | `boolean`  | no       | `false`              | Whether to use the testing API (`true`) or the production one (`false`).   |
+  | `display`(1)     | `string`   | no       | `'inline'`           | The display style of the element that hosts the Checkout.                  |
+  | `hideDetails`    | `boolean`  | no       | `false` | Whether to hide the details form or not. An expandable summary will be shown with the details, instead. |
+  | `language`(2)    | `string`   | no       | `undefined`          | The language in which to display the Checkout.                             |
   | `logoUrl`               | `string`  | no       | `undefined`     | The merchant logo url to display in the Checkout.                           |
   | `backgroundColor`       | `string`  | no       | `'#ffffff'`     | The color used as the background of the Checkout page.                      |
   | `accentColor`           | `string`  | no       | `'#0d71f9'`     | The color used in highlights, as well as default buttons and input borders. |
@@ -149,7 +150,7 @@ Returns a JSON Object (referred to as a *Checkout Manifest*) with the following 
   | `buttonBackgroundColor` | `string`  | no       | *accentColor*   | The color used for the button backgrounds.                                  |
   | `buttonBorderRadius`    | `number`  | no       | `50`            | The border radius for buttons, in `px`.                                     |
   | `buttonBoxShadow`       | `boolean` | no       | `true`          | Whether the buttons should have box-shadow.                                 |
-  | `fontFamily`            | `string`  | no       | `'Overpass'`    | The font used in the text.                                                  |
+  | `fontFamily`            | `string`  | no       | `'Overpass'`    | The font used for the text.                                                 |
   | `baseFontSize`          | `number`  | no       | `10`            | The value in `px` for the font size of the root element (`1rem`).           |
 
   ##### Options
@@ -166,7 +167,7 @@ Returns a JSON Object (referred to as a *Checkout Manifest*) with the following 
 
 #### Success handler:
 
-`onSuccess(successInfo)`
+`onSuccess(checkoutInfo)`
 
 Receives an object with the following properties:
 
@@ -246,6 +247,29 @@ The error `code` has the following possible values and recommended solutions:
 | `already-paid`     | The Checkout was already paid.    | Refresh the order information and confirm that it was paid. Give feedback to the user accordingly.                                   |
 | `checkout-canceled`     | The Checkout was canceled.    | Create a new Checkout session with the server-to-server call and use the newly returned Manifest to instantiate a new Checkout form.                                   |
 | `generic-error`    | An unspecified error occurred.    | Since the root cause is unclear, you can try creating a new session or signal an error to the user.                                  |
+
+<br>
+
+#### Payment error handler:
+
+`onPaymentError(error)`
+
+Signals the occurrence of a recoverable error during a payment attempt. These errors are informative and for logging/analysis purposes, as the user is allowed (and encouraged) to try the payment again with the same or other payment method.
+
+Receives an object with the following properties:
+
+| Property        | Type     | Description                                                               |
+| --------------- | -------- | ------------------------------------------------------------------------- |
+| `code`          | `string` | The type of error that occurred. See the table below for possible values. |
+| `paymentMethod` | `string` | The payment method for which the error happened.                          |
+| `checkout`      | `object` | On `payment-failure` errors, the Checkout object containing the payment information that had already been created. Has the same properties as the [onSuccess](/checkout/reference#success-handler) `checkoutInfo` object. |
+
+The error `code` has the following possible values and recommended solutions:
+
+| Value             | Cause                                                      | Recommended solution                           |
+| ----------------- | ---------------------------------------------------------- | ---------------------------------------------- |
+| `generic-error`   | There was an error before the payment process had started. | Allow the user to try again. If problem persists, report it to easypay.                                                       |
+| `payment-failure` | There was an error after the payment process had started.  | Allow the user to try again. If problem persists, use the attached `checkout` object to get details about the payment intent. |
 
 #### Examples of each appearance property
 
