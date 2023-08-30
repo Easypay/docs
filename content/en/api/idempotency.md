@@ -24,7 +24,7 @@ curl -L -X POST 'https://api.test.easypay.pt/2.0/checkout' \
   --data-raw '{ "type": [ "single" ] ... }'
 ```
 
-You can check if a request is a replay by checking if the `Idempotency-Replay` Header is present in the response and if it has the value 1.
+You can check if a request is a replay by checking if the `Idempotency-Replay` Header is present in the response and if it has the value `"true"`.
 
 ## Generating Idempotency Keys
 Although the technique of creating unique keys is your choice, **remember random string with sufficient entropy to prevent overlaps is advisable.**
@@ -42,16 +42,27 @@ The Idempotency layer compares the request body of the incoming request with tha
 
 **If they differ**, the system triggers an error to prevent inadvertent misuse.
 
-Repeated requests bearing the same key yield identical outcomes. The only exception pertains to **transition errors**, which we have identified as the following:
+Repeated requests bearing the same key yield identical outcomes. The only exception pertains to **transient errors**, which we have identified as the following:
 
 * Too Many Requests (HTTP status code 429)
+* Bad Gateway (HTTP status code 502)
 * Service Unavailable (HTTP status code 503)
-* Bad Request (HTTP status code 400)
-* Precondition Failed (HTTP status code 412)
 
 The previously mentioned error codes are safe to retry.
 
-It is important to mention that **Internal Server Error (HTTP status code 500) should be considered final and should not be retried**.
+To help the client applications decide whether to retry calls, the API's responses include an `X-Easypay-Should-Retry` header with value `"true"` or `"false"`.
+Note that this header does not take into account the number of tries already made, so clients should keep track and only send a limited number of equal requests (e.g. 3).
+
+If and when the header is not present, clients can use the following strategy to determine what to do: 
+
+1. If no response was received at all, resend the request.
+2. If the response has one of the following status codes, resend the request:
+   * Conflict (HTTP status code 409), may indicate the original request was still in transit
+   * Too Many Requests (HTTP status code 429)
+   * Bad Gateway (HTTP status code 502)
+   * Service Unavailable (HTTP status code 503)
+3. If the response has status code 500 (Internal Server Error), resend the request as long as it's **not** a `POST` request.
+4. Otherwise, don't repeat the request and handle the error.
 
 Idempotency Keys are automatically purged from the system once they've been in existence for 24 hours, and a fresh request is initiated if a key is reused after its original has been deleted.
 
