@@ -93,7 +93,7 @@ An object with the following properties:
   - `name`: `string` (<= 255 characters) with the customer's name. (*required*)
   - `email`: `string` (<= 70 characters) with the customer's email. (*required*)
   - `phone`: `string` (<= 15 characters) with the customer's phone number. (*required*)
-  - `phone_indicative`: `string` (<= 5 characters) with the phone country code.
+  - `phone_indicative`: `string` (<= 5 characters) with the phone country code. (*required*)
   - `fiscal_number`: `string` (<= 20 characters) with the customer's fiscal number (prefixed by the country code, e.g. `PT123456789`)
   - `key`: `string` (<= 255 characters) with the merchant's key to identify the customer.
   </details>
