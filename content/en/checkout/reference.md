@@ -187,10 +187,12 @@ Properties of the `payment` Object:
 | `method` (1)     | All          | `string`  | The payment method chosen by the customer.                                       |
 | `status` (2)     | All          | `Object`  | The status of the payment.                                                       |
 | `value`          | All          | `number`  | The order value, rounded to two decimal places. Not used in `frequent` payments. |
+| `cardType`       | Credit Card  | `string`  | The credit card type (`'VISA'` or `'MasterCard'`).                               |
+| `lastFour`       | Credit Card  | `string`  | The last four digits of the credit card.                                         |
+| `expirationDate` (3) | Credit Card / Multibanco   | `string`  | The expiration date of the card (Credit Card) or the payment (Multibanco).   |
 | `entity`         | Multibanco   | `string`  | The Multibanco entity.                                                           |
 | `reference`      | Multibanco   | `string`  | The Multibanco reference.                                                        |
-| `expirationDate` | Multibanco   | `string`  | The expiration date for the payment.                                             |
-| `sddMandate` (3) | Direct Debit | `Object`  | SEPA Direct Debit mandate.                                                       |
+| `sddMandate` (4) | Direct Debit | `Object`  | SEPA Direct Debit mandate.                                                       |
 
 (1) Possible method values are the same as in the [Checkout creation](/checkout/reference#create-checkout-session).
 
@@ -209,7 +211,9 @@ Properties of the `payment` Object:
 - `'voided'`
 </details>
 
-(3) Properties of the `sddMandate` Object:
+(3) Format of the expiration varies between Credit Card (`'MM/YY'` format) and Multibanco (`'Y-m-d H:i'`).
+
+(4) Properties of the `sddMandate` Object:
 <details><summary>Expand</summary>
 
 | Property        | Type     | Description                                                           |
