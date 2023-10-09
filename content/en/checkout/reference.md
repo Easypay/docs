@@ -189,6 +189,7 @@ Properties of the `payment` Object:
 | `value`          | All          | `number`  | The order value, rounded to two decimal places. Not used in `frequent` payments. |
 | `cardType`       | Credit Card  | `string`  | The credit card type (`'VISA'` or `'MasterCard'`).                               |
 | `lastFour`       | Credit Card  | `string`  | The last four digits of the credit card.                                         |
+| `cardCountryCode`| Credit Card  | `string`  | The country code of the credit card.                                             |
 | `expirationDate` (3) | Credit Card / Multibanco   | `string`  | The expiration date of the card (Credit Card) or the payment (Multibanco).   |
 | `entity`         | Multibanco   | `string`  | The Multibanco entity.                                                           |
 | `reference`      | Multibanco   | `string`  | The Multibanco reference.                                                        |
