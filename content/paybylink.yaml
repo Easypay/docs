@@ -1,0 +1,371 @@
+openapi: 3.1.0
+x-stoplight:
+  id: 8e9dm3ob0immm
+info:
+  title: PayByLink
+  version: '1.0'
+  contact:
+    name: Engineering Team
+    email: correio@easypay.pt
+  termsOfService: 'https://www.easypay.pt/en/legal-terms-and-conditions/'
+servers:
+  - url: 'https://api.prod.easypay.pt/2.0'
+    description: Production
+  - url: 'https://api.test.easypay.pt/2.0'
+    description: Sandbox
+security:
+  - accountId: []
+    apiKey: []
+paths:
+  /link:
+    post:
+      summary: Create a payment link
+      operationId: post-link
+      security:
+        - accountId: []
+          apiKey: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Link'
+      requestBody:
+        $ref: '#/components/requestBodies/Create-Link'
+      description: Creates a payment link to our hosted payment form where shoppers can pay. The list of payment methods presented to the shopper depends on the currency and country parameters sent in the request.
+    get:
+      summary: List all payment links
+      operationId: get-link
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Link'
+                  metadata:
+                    $ref: '#/components/schemas/Metadata'
+      security:
+        - accountId: []
+          apiKey: []
+      description: ''
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: id
+        - schema:
+            type: string
+          in: query
+          name: cursor
+        - schema:
+            type: string
+          in: query
+          name: limit
+        - schema:
+            type: string
+          in: query
+          name: amount
+        - schema:
+            type: string
+          in: query
+          name: customer_name
+        - schema:
+            type: string
+          in: query
+          name: email
+        - schema:
+            type: string
+          in: query
+          name: phone_number
+        - schema:
+            type: string
+          in: query
+          name: created_at
+        - schema:
+            type: string
+          in: query
+          name: modified_at
+        - schema:
+            type: string
+          in: query
+          name: expiration_time
+        - schema:
+            type: array
+          in: query
+          name: 'payment_method[]'
+        - schema:
+            type: array
+          in: query
+          name: 'status[]'
+  '/link/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: id of the link
+    get:
+      summary: Get a Link by Id
+      tags: []
+      security:
+        - accountId: []
+          apiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Link'
+      operationId: get-link-id
+    patch:
+      summary: Update Link by Id
+      operationId: patch-link
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        $ref: '#/components/requestBodies/Update-Link'
+components:
+  schemas:
+    Communication-Channels:
+      title: Communication-Channels
+      type: array
+      items:
+        type: string
+        enum:
+          - SMS
+          - EMAIL
+        example: SMS
+    Payment-Methods:
+      title: Payment-Methods
+      type: array
+      items:
+        type: string
+        enum:
+          - MB
+          - MBW
+          - DD
+          - CC
+          - SC
+          - UF
+          - VI
+        example: MBW
+    Customer:
+      title: Customer
+      type: object
+      description: 'Customer as name the says it represent the customer of this transaction. You can reference a previous created custom if you send us the id, or you can create a new customer.'
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The id of an existing customer.
+        name:
+          type: string
+          example: Jonh Doe
+          description: The name of the customer.
+        email:
+          type: string
+          format: email
+          example: example@easypay.pt
+          description: The email of the customer. The email of customer can be used if we need to comunicate with the customer.
+        phone:
+          type: string
+          example: '351911234567'
+          description: The phone of the customer. The phone of customer can be used if we need to comunicate with the customer.
+      required:
+        - name
+        - email
+        - phone
+    Payment-Types:
+      title: Payment-Types
+      type: string
+      enum:
+        - SINGLE
+        - FREQUENT
+        - SUBSCRIPTION
+      description: Which type of payment to use. Currently only single is supported.
+    Frequent:
+      type: object
+      properties:
+        minimum_amount:
+          type: string
+        maximum_amount:
+          type: string
+        unlimited_payments:
+          type: boolean
+      required:
+        - minimum_amount
+        - maximum_amount
+        - unlimited_payments
+    Subscription:
+      type: object
+      properties:
+        frequency:
+          type: string
+        maximum_captures:
+          type: string
+        start_time:
+          type: string
+        capture_now:
+          type: boolean
+        retries:
+          type: integer
+        failover:
+          type: boolean
+      required:
+        - frequency
+        - maximum_captures
+        - start_time
+        - capture_now
+        - retries
+        - failover
+    Single:
+      title: Single
+      type: object
+      properties:
+        requested_amount:
+          type: string
+    Capture:
+      title: Capture
+      type: object
+      properties:
+        descriptive:
+          type: string
+        key:
+          type: string
+    Link:
+      title: Link
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        expiration_time:
+          type: string
+          format: date-time
+        type:
+          $ref: '#/components/schemas/Payment-Types'
+        customer:
+          $ref: '#/components/schemas/Customer'
+        communication_channels:
+          $ref: '#/components/schemas/Communication-Channels'
+        payment:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            expiration_time:
+              type: string
+              format: date-time
+            methods:
+              $ref: '#/components/schemas/Payment-Methods'
+            capture:
+              $ref: '#/components/schemas/Capture'
+            single:
+              $ref: '#/components/schemas/Single'
+            frequent:
+              $ref: '#/components/schemas/Frequent'
+            subscription:
+              $ref: '#/components/schemas/Subscription'
+        url:
+          type: string
+          format: url
+          example: 'https://easypay.pt/s/XStDvnMKZaN'
+        image:
+          type: string
+          format: url
+          example: 'https://cdn.easypay.pt/images/qr/XStDvnMKZaN'
+        status:
+          $ref: '#/components/schemas/Status'
+    Status:
+      title: Status
+      type: string
+      enum:
+        - ACTIVE
+        - EXPIRED
+        - DISABLED
+        - USED
+    Metadata:
+      title: Metadata
+      type: object
+      properties:
+        next_cursor:
+          type: string
+          example: lL_j7ilk7rc
+        count:
+          type: number
+          example: 10
+  requestBodies:
+    Create-Link:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              expiration_time:
+                type: string
+                format: date-time
+                description: When does the link expires
+              type:
+                $ref: '#/components/schemas/Payment-Types'
+              customer:
+                $ref: '#/components/schemas/Customer'
+              communication_channels:
+                $ref: '#/components/schemas/Communication-Channels'
+              payment:
+                type: object
+                required:
+                  - expiration_time
+                  - methods
+                  - capture
+                properties:
+                  expiration_time:
+                    type: string
+                    format: date-time
+                  methods:
+                    $ref: '#/components/schemas/Payment-Methods'
+                  capture:
+                    $ref: '#/components/schemas/Capture'
+                  single:
+                    $ref: '#/components/schemas/Single'
+                  frequent:
+                    $ref: '#/components/schemas/Frequent'
+                  subscription:
+                    $ref: '#/components/schemas/Subscription'
+            required:
+              - expiration_time
+              - type
+              - customer
+              - payment
+      description: ''
+    Update-Link:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              expiration_time:
+                type: string
+                format: date-time
+  securitySchemes:
+    accountId:
+      type: apiKey
+      description: This is the identification for the Easypay Client Account
+      name: AccountId
+      in: header
+    apiKey:
+      type: apiKey
+      description: This is the counter key for the used Account Id
+      name: ApiKey
+      in: header
